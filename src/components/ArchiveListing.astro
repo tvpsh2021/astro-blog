@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Pagination from "./Pagination.astro";
+import type { Post } from "../lib/wordpress";
+
+interface Props {
+  posts: Post[];
+  currentPage: number;
+  totalPages: number;
+  totalPosts: number;
+}
+
+const { posts, currentPage, totalPages, totalPosts } = Astro.props;
+const years = new Map<string, Post[]>();
+for (const post of posts) {
+  const group = years.get(post.year) ?? [];
+  group.push(post);
+  years.set(post.year, group);
+}
+const pageTitle = currentPage === 1 ? "所有文章 | 淺草先生" : `所有文章 · 第 ${currentPage} 頁 | 淺草先生`;
+---
+
+<BaseLayout title={pageTitle} description="依年份瀏覽淺草先生的所有文章。">
+  <section class="page-intro">
+    <p class="eyebrow">THE ARCHIVE</p>
+    <h1>所有文章<span class="brand-dot">.</span></h1>
+    <p>共 {totalPosts} 篇文章。</p>
+  </section>
+  <div class="archive-list">
+    {[...years].map(([year, yearPosts]) => (
+      <section class="archive-year" aria-label={`${year} 年文章`}>
+        <h2>{year}</h2>
+        <div>
+          {yearPosts.map((post) => (
+            <a class="archive-entry" href={post.path}>
+              <time datetime={post.date}>{post.month}.{post.day}</time>
+              <span>{post.title}</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+  <div class="archive-pagination">
+    <Pagination basePath="/archive/" currentPage={currentPage} totalPages={totalPages} />
+  </div>
+</BaseLayout>

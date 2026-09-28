@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import { getPosts, type Post } from "../../../../lib/wordpress";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({
+    params: { year: post.year, month: post.month, day: post.day, slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const date = `${post.year} 年 ${Number(post.month)} 月 ${Number(post.day)} 日`;
+---
+
+<BaseLayout title={`${post.title} | 淺草先生`} description={post.excerpt || post.title} canonicalPath={post.path} image={post.featuredImage?.source_url} ogType="article">
+  <article class="article-page">
+    <header class="article-header">
+      <a class="back-link" href="/archive/"><span aria-hidden="true">←</span> 所有文章</a>
+      <div class="article-meta">
+        <time datetime={post.date}>{date}</time>
+        {post.categories.map((category) => <span>{category.name}</span>)}
+      </div>
+      <h1>{post.title}</h1>
+      <div class="article-header-rule"></div>
+    </header>
+    <div class="article-content" set:html={post.content} />
+    {post.tags.length > 0 && (
+      <div class="article-tags" aria-label="文章標籤">
+        {post.tags.map((tag) => <span>#{tag.name}</span>)}
+      </div>
+    )}
+    <footer class="article-footer">
+      <a href="/archive/">回到所有文章 <span aria-hidden="true">↗</span></a>
+    </footer>
+  </article>
+</BaseLayout>

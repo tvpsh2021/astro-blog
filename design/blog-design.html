@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Visual design guide for the Asakusa Sensei Astro blog." />
+    <title>Blog design guide | 淺草先生</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap");
+
+      :root {
+        font-family: "DM Sans", "Noto Sans TC", sans-serif;
+        color: #202723;
+        background: #f8f7f2;
+        font-synthesis: none;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+      body { margin: 0; }
+      a { color: #315a43; text-underline-offset: 3px; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .guide-shell { max-width: 1240px; margin: auto; padding: 0 38px 90px; }
+      .guide-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 29px 0; border-bottom: 1px solid #d9ded5; }
+      .guide-brand { display: flex; align-items: center; gap: 11px; font-weight: 700; }
+      .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 3px; color: #f9f8f4; background: #2c5041; font-size: 19px; font-weight: 500; }
+      .guide-header small, .eyebrow { color: #506e59; font-size: 11px; font-weight: 700; letter-spacing: .19em; text-transform: uppercase; }
+      .guide-intro { display: grid; grid-template-columns: 1.3fr .7fr; gap: 50px; align-items: end; padding: 83px 0 75px; border-bottom: 1px solid #cbd4ca; }
+      .guide-intro h1 { max-width: 780px; margin: 19px 0 23px; font-size: clamp(42px, 6vw, 74px); line-height: 1.13; letter-spacing: -.055em; }
+      .guide-intro h1 span { color: #426c55; }
+      .guide-intro p { max-width: 650px; margin: 0; color: #6d796e; font-size: 16px; line-height: 1.9; }
+      .guide-note { padding: 27px 29px; border-left: 3px solid #648a6c; background: #e8eee7; font-size: 13px; line-height: 1.8; }
+      .guide-note strong { display: block; margin-bottom: 7px; }
+      .guide-nav { display: flex; flex-wrap: wrap; gap: 9px; padding: 21px 0; border-bottom: 1px solid #d9ded5; }
+      .guide-nav a { padding: 8px 13px; border: 1px solid #cbd4ca; font-size: 12px; font-weight: 600; text-decoration: none; }
+      .guide-nav a:hover { background: #e8eee7; }
+      .guide-section { padding: 67px 0 7px; }
+      .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 25px; margin-bottom: 25px; }
+      .section-head h2 { margin: 0; font-size: 33px; letter-spacing: -.04em; }
+      .section-head span { color: #9aa69b; font-size: 12px; letter-spacing: .13em; }
+      .section-copy { max-width: 740px; margin: 0 0 30px; color: #6d796e; font-size: 14px; line-height: 1.85; }
+      .swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+      .swatch { overflow: hidden; border: 1px solid #d9ded5; background: #fffefa; }
+      .swatch-color { height: 92px; background: var(--swatch); }
+      .swatch-info { padding: 15px; }
+      .swatch-info strong, .swatch-info code, .swatch-info span { display: block; }
+      .swatch-info strong { font-size: 13px; }
+      .swatch-info code { margin-top: 6px; color: #416a50; font-size: 12px; }
+      .swatch-info span { margin-top: 5px; color: #7a8278; font-size: 11px; line-height: 1.5; }
+      .type-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+      .type-sample { min-height: 144px; padding: 24px; border: 1px solid #d9ded5; background: #fffefa; }
+      .type-sample small { display: block; margin-bottom: 17px; color: #7a8278; font-size: 11px; letter-spacing: .04em; }
+      .type-sample p { margin: 0; }
+      .type-display { font-size: clamp(34px, 4vw, 55px); font-weight: 600; line-height: 1.45; letter-spacing: -.045em; }
+      .type-section { font-size: 33px; font-weight: 600; letter-spacing: -.04em; }
+      .type-card { font-size: 23px; font-weight: 600; line-height: 1.55; }
+      .type-body { font-size: 16px; line-height: 1.95; }
+      .type-meta { color: #6d796e; font-size: 12px; }
+      .type-eyebrow { color: #506e59; font-size: 11px; font-weight: 700; letter-spacing: .19em; }
+      .spec-table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 1.7; }
+      .spec-table th, .spec-table td { padding: 16px 15px; border-bottom: 1px solid #d9ded5; text-align: left; vertical-align: top; }
+      .spec-table th { color: #506e59; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+      .spec-table td:first-child { font-weight: 600; }
+      .spec-table code { color: #315a43; }
+      .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+      .preview-panel { padding: 32px; border: 1px solid #d9ded5; background: #fffefa; }
+      .preview-panel h3 { margin: 0 0 24px; font-size: 14px; font-weight: 700; }
+      .preview-card { display: grid; grid-template-columns: 32px 1fr; gap: 17px; padding: 25px 0; border-top: 1px solid #cbd4ca; border-bottom: 1px solid #d9ded5; }
+      .preview-card > span { color: #9da99c; font-size: 13px; }
+      .preview-card time, .preview-archive time { color: #6d796e; font-size: 12px; }
+      .preview-card h4 { margin: 13px 0 9px; font-size: 22px; line-height: 1.55; }
+      .preview-card p { margin: 0 0 15px; color: #7a8278; font-size: 13px; line-height: 1.85; }
+      .preview-card a { font-size: 12px; font-weight: 700; text-decoration: none; }
+      .preview-archive { display: grid; grid-template-columns: 83px 1fr; gap: 18px; padding: 14px 0; border-top: 1px solid #d9ded5; }
+      .preview-archive strong { color: #426c55; font-size: 27px; font-weight: 500; }
+      .preview-archive div { display: grid; grid-template-columns: 57px 1fr; gap: 12px; align-items: start; font-size: 14px; line-height: 1.7; }
+      .preview-pagination { display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; margin-top: 30px; }
+      .preview-pagination span { min-width: 34px; height: 34px; display: grid; place-items: center; color: #416a50; font-size: 13px; }
+      .preview-pagination .active { color: #f8f7f2; background: #315a43; }
+      .article-preview { max-width: 780px; margin: 0 auto; padding: 44px 0; }
+      .article-preview time { color: #6d796e; font-size: 12px; }
+      .article-preview h3 { margin: 20px 0 33px; font-size: clamp(34px, 4vw, 55px); line-height: 1.45; letter-spacing: -.045em; }
+      .article-preview .rule { height: 1px; background: #cbd4ca; }
+      .article-preview p { margin: 45px 0 0; font-size: 16px; line-height: 1.95; }
+      .article-preview blockquote { margin: 29px 0 0; padding: 4px 0 4px 24px; border-left: 3px solid #648a6c; color: #56685a; line-height: 1.9; }
+      .legacy-code-preview { display: grid; grid-template-columns: auto minmax(max-content, 1fr); max-width: 100%; overflow-x: auto; margin-top: 30px; border-radius: 4px; background: #002b36; color: #93a1a1; font: 13px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .legacy-code-preview .numbers { padding: 16px 14px; border-right: 1px solid #31515a; background: #073642; color: #81979c; text-align: right; user-select: none; }
+      .legacy-code-preview code { display: block; padding: 16px 20px; white-space: pre; }
+      .legacy-code-preview .keyword { color: #268bd2; }
+      .legacy-code-preview .string { color: #859900; }
+      .guide-footer { margin-top: 80px; padding-top: 28px; border-top: 1px solid #d9ded5; color: #747d75; font-size: 12px; }
+      @media (max-width: 800px) {
+        .guide-intro, .preview-grid { grid-template-columns: 1fr; }
+        .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .type-grid { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 700px) {
+        .guide-shell { padding-inline: 22px; }
+        .guide-header small { display: none; }
+        .guide-intro { padding: 58px 0; }
+        .guide-section { padding-top: 52px; }
+        .section-head h2 { font-size: 29px; }
+        .preview-panel { padding: 22px; }
+        .spec-table { display: block; overflow-x: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="guide-shell">
+      <header class="guide-header">
+        <div class="guide-brand"><span class="brand-mark" aria-hidden="true">淺</span><span>淺草先生<span style="color:#be7555">.</span></span></div>
+        <small>Visual system / Version 1</small>
+      </header>
+
+      <main>
+        <section class="guide-intro" aria-labelledby="guide-title">
+          <div>
+            <span class="eyebrow">DESIGN REFERENCE</span>
+            <h1 id="guide-title">A quiet place<br /><span>for words.</span></h1>
+            <p>The Astro blog is a text-first journal. Warm off-white, restrained green, thin rules, and generous whitespace keep attention on the writing.</p>
+          </div>
+          <aside class="guide-note">
+            <strong>For maintainers</strong>
+            This page is a visual reference. The implementation source of truth is <a href="../src/styles/global.css"><code>src/styles/global.css</code></a>. Update this guide when the visual rules change.
+          </aside>
+        </section>
+
+        <nav class="guide-nav" aria-label="Guide sections">
+          <a href="#colors">Colors</a>
+          <a href="#typography">Typography</a>
+          <a href="#layout">Layout</a>
+          <a href="#components">Components</a>
+          <a href="#pages">Pages</a>
+          <a href="#maintenance">Maintenance</a>
+        </nav>
+
+        <section class="guide-section" id="colors" aria-labelledby="colors-title">
+          <div class="section-head"><h2 id="colors-title">Color palette</h2><span>01 / 06</span></div>
+          <p class="section-copy">The background is warm, not pure white. Green communicates identity and interaction. The small terracotta accent appears only on the brand dot.</p>
+          <div class="swatches">
+            <div class="swatch"><div class="swatch-color" style="--swatch:#f8f7f2"></div><div class="swatch-info"><strong>Page background</strong><code>#f8f7f2</code><span>Site canvas</span></div></div>
+            <div class="swatch"><div class="swatch-color" style="--swatch:#202723"></div><div class="swatch-info"><strong>Primary text</strong><code>#202723</code><span>Headings and article body</span></div></div>
+            <div class="swatch"><div class="swatch-color" style="--swatch:#2c5041"></div><div class="swatch-info"><strong>Brand green</strong><code>#2c5041</code><span>Header mark</span></div></div>
+            <div class="swatch"><div class="swatch-color" style="--swatch:#416a50"></div><div class="swatch-info"><strong>Link green</strong><code>#416a50</code><span>Links and navigation</span></div></div>
+            <div class="swatch"><div class="swatch-color" style="--swatch:#315a43"></div><div class="swatch-info"><strong>Active green</strong><code>#315a43</code><span>Selected page number</span></div></div>
+            <div class="swatch"><div class="swatch-color" style="--swatch:#7a8278"></div><div class="swatch-info"><strong>Muted text</strong><code>#7a8278</code><span>Excerpts and support text</span></div></div>
+            <div class="swatch"><div class="swatch-color" style="--swatch:#d9ded5"></div><div class="swatch-info"><strong>Divider</strong><code>#d9ded5</code><span>List and section rules</span></div></div>
+            <div class="swatch"><div class="swatch-color" style="--swatch:#be7555"></div><div class="swatch-info"><strong>Small accent</strong><code>#be7555</code><span>Brand and archive title dot</span></div></div>
+          </div>
+        </section>
+
+        <section class="guide-section" id="typography" aria-labelledby="typography-title">
+          <div class="section-head"><h2 id="typography-title">Typography</h2><span>02 / 06</span></div>
+          <p class="section-copy">The font stack is DM Sans, Noto Sans TC, then system sans-serif. The site loads the first two through Google Fonts and remains usable with local fallbacks.</p>
+          <div class="type-grid">
+            <div class="type-sample"><small>ARTICLE TITLE · 34–55px / 600 / 1.45</small><p class="type-display">如何整理一份閱讀清單</p></div>
+            <div class="type-sample"><small>SECTION TITLE · 33px / 600</small><p class="type-section">最近的筆記</p></div>
+            <div class="type-sample"><small>POST CARD TITLE · 19–25px / 600 / 1.55</small><p class="type-card">窗邊植物的日常照護</p></div>
+            <div class="type-sample"><small>ARTICLE BODY · 16px / 1.95</small><p class="type-body">將主題相近的資料放在一起，閱讀時更容易找到需要的內容。</p></div>
+            <div class="type-sample"><small>METADATA · 12px</small><p class="type-meta">2025.05.18　│　範例分類</p></div>
+            <div class="type-sample"><small>EYEBROW · 11px / 700 / 0.19em</small><p class="type-eyebrow">THE LATEST</p></div>
+          </div>
+        </section>
+
+        <section class="guide-section" id="layout" aria-labelledby="layout-title">
+          <div class="section-head"><h2 id="layout-title">Layout and spacing</h2><span>03 / 06</span></div>
+          <table class="spec-table">
+            <thead><tr><th scope="col">Area</th><th scope="col">Desktop</th><th scope="col">At 700px and below</th></tr></thead>
+            <tbody>
+              <tr><td>Wide content</td><td>Maximum width <code>1180px</code>; side gutters <code>38px</code></td><td>Side gutters <code>22px</code></td></tr>
+              <tr><td>Article reading column</td><td>Maximum width <code>780px</code>; body <code>16px / 1.95</code></td><td>Body <code>15px / 1.95</code></td></tr>
+              <tr><td>Header</td><td>Height <code>90px</code></td><td>Height <code>72px</code>; side gutters <code>20px</code></td></tr>
+              <tr><td>Homepage list</td><td>Starts <code>85px</code> below the header</td><td>Starts <code>60px</code> below the header</td></tr>
+              <tr><td>Archive year</td><td>Year occupies a <code>145px</code> column</td><td>Year moves above its posts</td></tr>
+              <tr><td>Article content</td><td>Starts <code>53px</code> below the title rule</td><td>Starts <code>38px</code> below the title rule</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="guide-section" id="components" aria-labelledby="components-title">
+          <div class="section-head"><h2 id="components-title">Components</h2><span>04 / 06</span></div>
+          <p class="section-copy">These examples use fictional placeholder content to show the visual hierarchy. The rendered site uses WordPress content through the Astro components listed below.</p>
+          <div class="preview-grid">
+            <div class="preview-panel">
+              <h3>Homepage post card</h3>
+              <div class="preview-card"><span>01</span><div><time>2025.05.18　│　範例分類</time><h4>窗邊植物的日常照護</h4><p>從日照、澆水到換盆，整理幾項容易觀察的照護重點。</p><a href="../src/components/PostCard.astro">閱讀文章 ↗</a></div></div>
+            </div>
+            <div class="preview-panel">
+              <h3>Archive row and pagination</h3>
+              <div class="preview-archive"><strong>2024</strong><div><time>09.12</time><span>如何整理一份閱讀清單</span></div></div>
+              <div class="preview-pagination" aria-label="Pagination example"><span class="active">1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+            </div>
+          </div>
+          <div class="article-preview" aria-label="Article style example">
+            <time>2024 年 9 月 12 日　│　範例分類</time>
+            <h3>如何整理一份閱讀清單</h3>
+            <div class="rule"></div>
+            <p>先依主題整理書目，再為每本書留下幾句摘要，之後就能快速回顧重點。</p>
+            <blockquote>清楚的分類，能讓閱讀清單更容易持續更新。</blockquote>
+            <div class="legacy-code-preview" aria-label="Code block with line numbers"><span class="numbers">1<br />2</span><code><span class="keyword">const</span> books = [<span class="string">"A Field Guide"</span>];
+<span class="keyword">const</span> readingList = books.filter(Boolean);</code></div>
+          </div>
+        </section>
+
+        <section class="guide-section" id="pages" aria-labelledby="pages-title">
+          <div class="section-head"><h2 id="pages-title">Page behavior</h2><span>05 / 06</span></div>
+          <table class="spec-table">
+            <thead><tr><th scope="col">Page</th><th scope="col">Routes</th><th scope="col">Content</th></tr></thead>
+            <tbody>
+              <tr><td>Homepage</td><td><code>/</code>, then <code>/page/2/</code> and later pages</td><td>8 posts per page, newest first. Sequence numbers continue across pages. No hero section.</td></tr>
+              <tr><td>Archive</td><td><code>/archive/</code>, then <code>/archive/page/2/</code> and later pages</td><td>20 posts per page, grouped by year within each page.</td></tr>
+              <tr><td>Article</td><td><code>/YYYY/MM/DD/slug/</code></td><td>Existing WordPress permalink, title, date, categories, rendered content, and tags.</td></tr>
+            </tbody>
+          </table>
+          <p class="section-copy" style="margin-top:25px">The first list page always uses its short URL. Pagination has page numbers plus previous and next links. The current page uses a filled green square and <code>aria-current="page"</code>. Each generated page has its own title and canonical URL.</p>
+        </section>
+
+        <section class="guide-section" id="maintenance" aria-labelledby="maintenance-title">
+          <div class="section-head"><h2 id="maintenance-title">Maintenance notes</h2><span>06 / 06</span></div>
+          <table class="spec-table">
+            <thead><tr><th scope="col">Source</th><th scope="col">Responsibility</th></tr></thead>
+            <tbody>
+              <tr><td><a href="../src/styles/global.css"><code>src/styles/global.css</code></a></td><td>Live colors, typography, layout, responsive rules, and WordPress content styles.</td></tr>
+              <tr><td><a href="../src/layouts/BaseLayout.astro"><code>BaseLayout.astro</code></a></td><td>Header, footer, stylesheet, and document metadata.</td></tr>
+              <tr><td><a href="../src/components/HomeListing.astro"><code>HomeListing.astro</code></a> and <a href="../src/components/ArchiveListing.astro"><code>ArchiveListing.astro</code></a></td><td>List page structure and headings.</td></tr>
+              <tr><td><a href="../src/components/Pagination.astro"><code>Pagination.astro</code></a> and <a href="../src/lib/pagination.ts"><code>pagination.ts</code></a></td><td>Navigation markup and page sizes.</td></tr>
+            </tbody>
+          </table>
+          <p class="section-copy" style="margin-top:25px">Keep one visible <code>h1</code> per page. Preserve clear navigation labels, keyboard focus, and readable contrast. Check desktop and small-screen layouts after changing spacing. WordPress HTML has basic styles for headings, images, captions, embeds, lists, and quotes. Legacy <code>codecolorer-container</code> blocks fill the article width, keep line numbers in a separate gutter, and scroll horizontally for long lines; add other plugin-specific styles only after checking an affected article.</p>
+        </section>
+      </main>
+
+      <footer class="guide-footer">Design reference for the Astro blog. Update alongside the implementation.</footer>
+    </div>
+  </body>
+</html>

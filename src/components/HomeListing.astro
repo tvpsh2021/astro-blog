@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Pagination from "./Pagination.astro";
+import PostCard from "./PostCard.astro";
+import { HOME_PAGE_SIZE } from "../lib/pagination";
+import type { Post } from "../lib/wordpress";
+
+interface Props {
+  posts: Post[];
+  currentPage: number;
+  totalPages: number;
+  totalPosts: number;
+}
+
+const { posts, currentPage, totalPages, totalPosts } = Astro.props;
+const firstNumber = (currentPage - 1) * HOME_PAGE_SIZE + 1;
+const lastNumber = firstNumber + posts.length - 1;
+const pageTitle = currentPage === 1 ? "淺草先生 | 忙碌人生" : `文章 · 第 ${currentPage} 頁 | 淺草先生`;
+---
+
+<BaseLayout title={pageTitle} description="淺草先生的技術與生活筆記。">
+  <section class="latest-section" aria-labelledby="latest-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">{currentPage === 1 ? "THE LATEST" : "THE JOURNAL"}</p>
+        <h1 id="latest-title">{currentPage === 1 ? "最近的筆記" : "更多筆記"}</h1>
+      </div>
+      <span class="section-count">{String(firstNumber).padStart(2, "0")} — {String(lastNumber).padStart(2, "0")}</span>
+    </div>
+    <div class="post-list">
+      {posts.map((post, index) => <PostCard post={post} index={firstNumber + index - 1} />)}
+    </div>
+    <Pagination basePath="/" currentPage={currentPage} totalPages={totalPages} />
+    <a class="all-posts-link" href="/archive/">瀏覽所有 {totalPosts} 篇文章 <span aria-hidden="true">↗</span></a>
+  </section>
+</BaseLayout>

@@ -1,0 +1,28 @@
+---
+import HomeListing from "../../components/HomeListing.astro";
+import { HOME_PAGE_SIZE, pageCount, pageItems } from "../../lib/pagination";
+import { getPosts, type Post } from "../../lib/wordpress";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const totalPages = pageCount(posts.length, HOME_PAGE_SIZE);
+  return Array.from({ length: totalPages - 1 }, (_, index) => {
+    const page = index + 2;
+    return {
+      params: { page: String(page) },
+      props: { posts: pageItems(posts, page, HOME_PAGE_SIZE), currentPage: page, totalPages, totalPosts: posts.length },
+    };
+  });
+}
+
+interface Props {
+  posts: Post[];
+  currentPage: number;
+  totalPages: number;
+  totalPosts: number;
+}
+
+const { posts, currentPage, totalPages, totalPosts } = Astro.props;
+---
+
+<HomeListing posts={posts} currentPage={currentPage} totalPages={totalPages} totalPosts={totalPosts} />

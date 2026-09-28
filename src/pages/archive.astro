@@ -1,0 +1,10 @@
+---
+import ArchiveListing from "../components/ArchiveListing.astro";
+import { ARCHIVE_PAGE_SIZE, pageCount, pageItems } from "../lib/pagination";
+import { getPosts } from "../lib/wordpress";
+
+const posts = await getPosts();
+const totalPages = pageCount(posts.length, ARCHIVE_PAGE_SIZE);
+---
+
+<ArchiveListing posts={pageItems(posts, 1, ARCHIVE_PAGE_SIZE)} currentPage={1} totalPages={totalPages} totalPosts={posts.length} />

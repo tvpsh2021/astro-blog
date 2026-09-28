@@ -1,0 +1,26 @@
+---
+import type { Post } from "../lib/wordpress";
+
+interface Props {
+  post: Post;
+  index?: number;
+}
+
+const { post, index } = Astro.props;
+const date = `${post.year}.${post.month}.${post.day}`;
+---
+
+<article class="post-card">
+  {index !== undefined && <span class="post-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>}
+  <div class="post-card-body">
+    <div class="post-meta">
+      <time datetime={post.date}>{date}</time>
+      {post.categories[0] && <span class="meta-category">{post.categories[0].name}</span>}
+    </div>
+    <h3><a href={post.path}>{post.title}</a></h3>
+    {post.excerpt && <p>{post.excerpt}</p>}
+    <a class="text-link" href={post.path} aria-label={`閱讀 ${post.title}`}>
+      閱讀文章 <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</article>

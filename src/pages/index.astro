@@ -1,17 +1,10 @@
 ---
-// Welcome to Astro! Everything between these triple-dash code fences
-// is your "component frontmatter". It never runs in the browser.
-console.log('This runs in your terminal, not the browser!');
+import HomeListing from "../components/HomeListing.astro";
+import { HOME_PAGE_SIZE, pageCount, pageItems } from "../lib/pagination";
+import { getPosts } from "../lib/wordpress";
+
+const posts = await getPosts();
+const totalPages = pageCount(posts.length, HOME_PAGE_SIZE);
 ---
-<!-- Below is your "component template." It's just HTML, but with
-    some magic sprinkled in to help you build great templates. -->
-<html>
-  <body>
-    <h1>Hello, World!</h1>
-  </body>
-</html>
-<style>
-  h1 {
-    color: orange;
-  }
-</style>
+
+<HomeListing posts={pageItems(posts, 1, HOME_PAGE_SIZE)} currentPage={1} totalPages={totalPages} totalPosts={posts.length} />
