@@ -101,7 +101,14 @@ async function fetchPage(page: number) {
   url.searchParams.set("page", String(page));
   url.searchParams.set("_embed", "1");
   const response = await fetch(url);
-  if (!response.ok) throw new Error(`WordPress API page ${page} failed: ${response.status} ${response.statusText}`);
+  if (!response.ok) {
+    const ray = response.headers.get("cf-ray");
+    const detail = (await response.text()).replace(/\s+/g, " ").slice(0, 300);
+    throw new Error(
+      `WordPress API page ${page} failed: ${response.status} ${response.statusText}`
+      + ` (origin: ${url.origin}, cf-ray: ${ray ?? "none"})${detail ? `: ${detail}` : ""}`,
+    );
+  }
 
   const totalPages = Number(response.headers.get("X-WP-TotalPages"));
   const total = Number(response.headers.get("X-WP-Total"));

@@ -1,0 +1,6 @@
+# Keep the staging and preview hosts out of search results after the custom domain is added.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex

@@ -20,6 +20,7 @@ const canonical = new URL(canonicalPath, Astro.site ?? Astro.url);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="淺草先生 RSS" href={new URL("/rss.xml", Astro.site ?? Astro.url)} />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
