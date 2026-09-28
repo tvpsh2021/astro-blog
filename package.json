@@ -1,0 +1,26 @@
+{
+  "name": "astro-blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tvpsh2021/astro-blog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/tvpsh2021/astro-blog/issues"
+  },
+  "homepage": "https://github.com/tvpsh2021/astro-blog#readme",
+  "dependencies": {
+    "astro": "^7.3.5"
+  }
+}
