@@ -77,6 +77,11 @@ function normalizePost(post: WordPressPost): Post {
   const terms = post._embedded?.["wp:term"]?.flat() ?? [];
   const excerpt = plainText(post.excerpt.rendered)
     .replace(/\s*(?:…\s*)?閱讀全文\s*〈.*$/, "")
+    // WordPress trims excerpts by length and can cut an entity in half, e.g. "&quot".
+    .replace(/&#?\w*$/, "")
+    // Excerpts collapse line breaks to spaces; between CJK text a space is almost always
+    // a line break in the original post, so mark it instead of gluing sentences together.
+    .replace(/(?<=[\p{Script=Han}，。！？、」』）])\s+(?=[\p{Script=Han}「『（])/gu, "／")
     .trim();
   return {
     id: post.id,

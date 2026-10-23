@@ -11,6 +11,7 @@ interface Props {
 
 const { title, description, canonicalPath = Astro.url.pathname, image, ogType = "website" } = Astro.props;
 const canonical = new URL(canonicalPath, Astro.site ?? Astro.url);
+const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -24,6 +25,13 @@ const canonical = new URL(canonicalPath, Astro.site ?? Astro.url);
       gtag('js', new Date());
 
       gtag('config', 'G-3P4BL5CSC8');
+    </script>
+    <script is:inline>
+      // Apply the saved theme before first paint; "auto" follows the OS setting.
+      try {
+        const theme = localStorage.getItem("theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      } catch {}
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -42,17 +50,50 @@ const canonical = new URL(canonicalPath, Astro.site ?? Astro.url);
       <header class="site-header">
         <a class="brand" href="/" aria-label="淺草先生，回到首頁">
           <span class="brand-mark" aria-hidden="true">淺</span>
-          <span class="brand-name">淺草先生<span class="brand-dot">.</span></span>
+          <span class="brand-name">淺草先生</span>
         </a>
         <nav aria-label="主要導覽">
           <a href="/">首頁</a>
           <a href="/archive/">所有文章</a>
+          <button class="theme-toggle" type="button" data-theme-toggle><span class="theme-prefix">外觀：</span>自動</button>
         </nav>
       </header>
       <main><slot /></main>
       <footer class="site-footer">
-        <span>淺草先生 · 忙碌人生</span>
+        <span>© 2007–{currentYear} 淺草先生</span>
+        <a href="/rss.xml">RSS 訂閱</a>
       </footer>
     </div>
+    <script>
+      const MODES = ["auto", "light", "dark"] as const;
+      type Mode = (typeof MODES)[number];
+      const LABELS: Record<Mode, string> = { auto: "自動", light: "淺色", dark: "深色" };
+
+      const root = document.documentElement;
+      const button = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+      const currentMode = (): Mode => (root.dataset.theme as Mode | undefined) ?? "auto";
+
+      function render(mode: Mode) {
+        if (!button) return;
+        const prefix = document.createElement("span");
+        prefix.className = "theme-prefix";
+        prefix.textContent = "外觀：";
+        button.replaceChildren(prefix, LABELS[mode]);
+        button.setAttribute("aria-label", `外觀：${LABELS[mode]}，按下切換`);
+      }
+
+      render(currentMode());
+      button?.addEventListener("click", () => {
+        const next = MODES[(MODES.indexOf(currentMode()) + 1) % MODES.length];
+        if (next === "auto") delete root.dataset.theme;
+        else root.dataset.theme = next;
+        // Storage can be unavailable (private mode, blocked site data); the choice then lasts for this page only.
+        try {
+          if (next === "auto") localStorage.removeItem("theme");
+          else localStorage.setItem("theme", next);
+        } catch {}
+        render(next);
+      });
+    </script>
   </body>
 </html>

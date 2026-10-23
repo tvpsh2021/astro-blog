@@ -1,33 +1,32 @@
 ---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import { archiveYearHref, fullDate } from "../../../../lib/timeline";
 import { getPosts, type Post } from "../../../../lib/wordpress";
 
 export async function getStaticPaths() {
   const posts = await getPosts();
   return posts.map((post) => ({
     params: { year: post.year, month: post.month, day: post.day, slug: post.slug },
-    props: { post },
+    props: { post, yearHref: archiveYearHref(posts.findIndex(({ year }) => year === post.year), post.year) },
   }));
 }
 
 interface Props {
   post: Post;
+  yearHref: string;
 }
 
-const { post } = Astro.props;
-const date = `${post.year} 年 ${Number(post.month)} 月 ${Number(post.day)} 日`;
+const { post, yearHref } = Astro.props;
 ---
 
 <BaseLayout title={`${post.title} | 淺草先生`} description={post.excerpt || post.title} canonicalPath={post.path} image={post.featuredImage?.source_url} ogType="article">
   <article class="article-page">
     <header class="article-header">
-      <a class="back-link" href="/archive/"><span aria-hidden="true">←</span> 所有文章</a>
       <div class="article-meta">
-        <time datetime={post.date}>{date}</time>
+        <time datetime={post.date}>{fullDate(post)}</time>
         {post.categories.map((category) => <span>{category.name}</span>)}
       </div>
       <h1>{post.title}</h1>
-      <div class="article-header-rule"></div>
     </header>
     <div class="article-content" set:html={post.content} />
     {post.tags.length > 0 && (
@@ -36,7 +35,7 @@ const date = `${post.year} 年 ${Number(post.month)} 月 ${Number(post.day)} 日
       </div>
     )}
     <footer class="article-footer">
-      <a href="/archive/">回到所有文章 <span aria-hidden="true">↗</span></a>
+      <a href={yearHref}>{post.year} 年的其他文章</a>
     </footer>
   </article>
 </BaseLayout>

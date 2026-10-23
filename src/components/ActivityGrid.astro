@@ -1,0 +1,75 @@
+---
+import { activityLevel, yearlyActivity } from "../lib/timeline";
+import type { Post } from "../lib/wordpress";
+
+interface Props {
+  posts: Post[];
+}
+
+const MONTHS = Array.from({ length: 12 }, (_, index) => index + 1);
+const LABELED_MONTHS = new Set([1, 4, 7, 10]);
+// Year labels are wider than a cell, so only label the ends and every fifth year
+// that is far enough from them not to overlap.
+const MIN_LABEL_GAP = 3;
+
+const years = yearlyActivity(Astro.props.posts);
+const first = years[0]?.year;
+const last = years.at(-1)?.year;
+const isLabeled = (year: number) =>
+  year === first || year === last
+  || (year % 5 === 0 && year - first! >= MIN_LABEL_GAP && last! - year >= MIN_LABEL_GAP);
+---
+
+{years.length > 0 && (
+  <details class="activity" open data-activity>
+    <summary class="activity-summary">寫作紀錄</summary>
+    <div class="activity-scroll">
+      <div class="activity-grid" style={`--years: ${years.length}`}>
+        {MONTHS.filter((month) => LABELED_MONTHS.has(month)).map((month) => (
+          <span class="activity-month" style={`grid-row: ${month}`} aria-hidden="true">{month} 月</span>
+        ))}
+        {years.map(({ year, total, monthCounts, href }, index) => {
+          const cells = monthCounts.map((count, month) => (
+            <span
+              class="activity-cell"
+              data-level={activityLevel(count)}
+              title={count > 0 ? `${year} 年 ${month + 1} 月：${count} 篇` : undefined}
+            />
+          ));
+          const column = `grid-column: ${index + 2}`;
+          return href
+            ? <a class="activity-year" href={href} style={column} aria-label={`${year} 年，${total} 篇`}>{cells}</a>
+            : <span class="activity-year" style={column} aria-hidden="true">{cells}</span>;
+        })}
+        {years.filter(({ year }) => isLabeled(year)).map(({ year }) => {
+          const column = year - first! + 2;
+          // The newest label is right-aligned over the last three columns so it does not overflow the grid.
+          return year === last
+            ? <span class="activity-label activity-label-end" style={`grid-column: ${Math.max(2, column - 2)} / ${column + 1}`} aria-hidden="true">{year}</span>
+            : <span class="activity-label" style={`grid-column: ${column}`} aria-hidden="true">{year}</span>;
+        })}
+      </div>
+    </div>
+  </details>
+)}
+
+<script is:inline>
+  // Runs right after the grid is parsed, so a reader who collapsed it never sees it flash open.
+  try {
+    if (localStorage.getItem("activity") === "closed") {
+      const grid = document.querySelector("[data-activity]");
+      if (grid) grid.open = false;
+    }
+  } catch {}
+</script>
+
+<script>
+  const grid = document.querySelector<HTMLDetailsElement>("[data-activity]");
+  grid?.addEventListener("toggle", () => {
+    // Storage can be unavailable; the grid then just reopens on the next visit.
+    try {
+      if (grid.open) localStorage.removeItem("activity");
+      else localStorage.setItem("activity", "closed");
+    } catch {}
+  });
+</script>
