@@ -26,4 +26,4 @@ npm run preview
 
 The build fetches all published posts with WordPress REST API pagination. It fails if the API is unavailable, the reported post count does not match the fetched count, or a permalink cannot be mapped to the existing `/YYYY/MM/DD/slug/` format.
 
-The build also creates `/sitemap.xml`, `/rss.xml`, and `/404.html`. Cloudflare Pages reads `public/_headers` to set `X-Robots-Tag: noindex` on `pages.dev` hosts only. Set `WP_API_BASE_URL` in the Pages build environment before deploying.
+The build also creates `/sitemap.xml`, `/rss.xml`, and `/404.html`. Cloudflare Pages reads `public/_headers` to set `X-Robots-Tag: noindex` on `pages.dev` hosts only. Set `WP_API_BASE_URL` in the Pages build environment before deploying. Astro needs Node.js 22.23.4 or later; Cloudflare Pages picks up the version pinned in `.node-version`, so a `NODE_VERSION` variable in the Pages settings would override it.
