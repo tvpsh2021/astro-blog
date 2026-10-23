@@ -1,0 +1,17 @@
+---
+import TermListing from "../../components/TermListing.astro";
+import { getCategoryArchives, termParam, type TermArchive } from "../../lib/taxonomy";
+
+export async function getStaticPaths() {
+  const archives = await getCategoryArchives();
+  return archives.map((archive) => ({ params: { path: termParam(archive.path, "category") }, props: { archive } }));
+}
+
+interface Props {
+  archive: TermArchive;
+}
+
+const { archive } = Astro.props;
+---
+
+<TermListing archive={archive} kind="分類" />

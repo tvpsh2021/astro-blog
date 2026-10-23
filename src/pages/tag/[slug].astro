@@ -1,0 +1,17 @@
+---
+import TermListing from "../../components/TermListing.astro";
+import { getTagArchives, MIN_INDEXED_TAG_POSTS, termParam, type TermArchive } from "../../lib/taxonomy";
+
+export async function getStaticPaths() {
+  const archives = await getTagArchives();
+  return archives.map((archive) => ({ params: { slug: termParam(archive.path, "tag") }, props: { archive } }));
+}
+
+interface Props {
+  archive: TermArchive;
+}
+
+const { archive } = Astro.props;
+---
+
+<TermListing archive={archive} kind="標籤" noindex={archive.posts.length < MIN_INDEXED_TAG_POSTS} />

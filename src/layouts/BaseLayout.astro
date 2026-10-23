@@ -7,9 +7,10 @@ interface Props {
   canonicalPath?: string;
   image?: string;
   ogType?: "website" | "article";
+  noindex?: boolean;
 }
 
-const { title, description, canonicalPath = Astro.url.pathname, image, ogType = "website" } = Astro.props;
+const { title, description, canonicalPath = Astro.url.pathname, image, ogType = "website", noindex = false } = Astro.props;
 const canonical = new URL(canonicalPath, Astro.site ?? Astro.url);
 const currentYear = new Date().getFullYear();
 ---
@@ -36,7 +37,11 @@ const currentYear = new Date().getFullYear();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title="淺草先生 RSS" href={new URL("/rss.xml", Astro.site ?? Astro.url)} />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
@@ -51,10 +56,12 @@ const currentYear = new Date().getFullYear();
         <a class="brand" href="/" aria-label="淺草先生，回到首頁">
           <span class="brand-mark" aria-hidden="true">淺</span>
           <span class="brand-name">淺草先生</span>
+          <span class="brand-tagline">忙碌人生</span>
         </a>
         <nav aria-label="主要導覽">
           <a href="/">首頁</a>
           <a href="/archive/">所有文章</a>
+          <a href="/categories/">分類</a>
           <button class="theme-toggle" type="button" data-theme-toggle><span class="theme-prefix">外觀：</span>自動</button>
         </nav>
       </header>

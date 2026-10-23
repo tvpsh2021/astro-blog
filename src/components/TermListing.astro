@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostTimeline from "./PostTimeline.astro";
+import type { TermArchive } from "../lib/taxonomy";
+
+interface Props {
+  archive: TermArchive;
+  kind: "分類" | "標籤";
+  noindex?: boolean;
+}
+
+const { archive, kind, noindex = false } = Astro.props;
+const heading = kind === "標籤" ? `#${archive.name}` : archive.name;
+---
+
+<BaseLayout title={`${heading} | 淺草先生`} description={`淺草先生「${archive.name}」${kind}的文章。`} noindex={noindex}>
+  <section class="page-intro">
+    <p class="term-kicker">
+      <a href="/categories/">{kind}</a>
+      {archive.parent && <>{" / "}<a href={archive.parent.path}>{archive.parent.name}</a></>}
+    </p>
+    <h1>{heading}</h1>
+    <p>共 {archive.posts.length} 篇，從新到舊排列。</p>
+    {archive.children.length > 0 && (
+      <ul class="term-list term-list-inline" aria-label="子分類">
+        {archive.children.map((child) => (
+          <li><a href={child.path}>{child.name}<span class="term-count">{child.posts.length}</span></a></li>
+        ))}
+      </ul>
+    )}
+  </section>
+  <div class="page-body">
+    <PostTimeline posts={archive.posts} />
+  </div>
+</BaseLayout>

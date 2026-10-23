@@ -24,14 +24,14 @@ const { post, yearHref } = Astro.props;
     <header class="article-header">
       <div class="article-meta">
         <time datetime={post.date}>{fullDate(post)}</time>
-        {post.categories.map((category) => <span>{category.name}</span>)}
+        {post.categories.map((category) => <a href={category.path}>{category.name}</a>)}
       </div>
       <h1>{post.title}</h1>
     </header>
     <div class="article-content" set:html={post.content} />
     {post.tags.length > 0 && (
       <div class="article-tags" aria-label="文章標籤">
-        {post.tags.map((tag) => <span>#{tag.name}</span>)}
+        {post.tags.map((tag) => <a href={tag.path}>#{tag.name}</a>)}
       </div>
     )}
     <footer class="article-footer">

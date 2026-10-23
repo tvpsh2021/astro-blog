@@ -11,10 +11,12 @@ const { post, showExcerpt = false } = Astro.props;
 ---
 
 <li class="entry">
-  <time class="entry-date" datetime={post.date}>{monthDay(post)}</time>
+  <div class="entry-meta">
+    <time class="entry-date" datetime={post.date}>{monthDay(post)}</time>
+    {showExcerpt && post.categories[0] && <a class="entry-category" href={post.categories[0].path}>{post.categories[0].name}</a>}
+  </div>
   <div class="entry-body">
     <h3 class="entry-title"><a href={post.path}>{post.title}</a></h3>
     {showExcerpt && post.excerpt && <p class="entry-excerpt">{post.excerpt}</p>}
-    {showExcerpt && post.categories[0] && <p class="entry-category">{post.categories[0].name}</p>}
   </div>
 </li>

@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { ARCHIVE_PAGE_SIZE, HOME_PAGE_SIZE, pageCount } from "../lib/pagination";
+import { getCategoryArchives, getTagArchives, MIN_INDEXED_TAG_POSTS } from "../lib/taxonomy";
 import { getPosts } from "../lib/wordpress";
 import { escapeXml } from "../lib/xml";
 
@@ -7,12 +8,16 @@ export const GET: APIRoute = async ({ site }) => {
   if (!site) throw new Error("Astro site URL is required to generate the sitemap.");
 
   const posts = await getPosts();
-  const listPaths = ["/", "/archive/"];
+  const listPaths = ["/", "/archive/", "/categories/"];
   for (let page = 2; page <= pageCount(posts.length, HOME_PAGE_SIZE); page += 1) {
     listPaths.push(`/page/${page}/`);
   }
   for (let page = 2; page <= pageCount(posts.length, ARCHIVE_PAGE_SIZE); page += 1) {
     listPaths.push(`/archive/page/${page}/`);
+  }
+  listPaths.push(...(await getCategoryArchives()).map((archive) => archive.path));
+  for (const tag of await getTagArchives()) {
+    if (tag.posts.length >= MIN_INDEXED_TAG_POSTS) listPaths.push(tag.path);
   }
 
   const entries = [

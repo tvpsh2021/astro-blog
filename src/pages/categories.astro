@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCategoryArchives, getTagArchives, MIN_INDEXED_TAG_POSTS } from "../lib/taxonomy";
+
+const categories = (await getCategoryArchives()).filter((archive) => !archive.parent);
+const tags = (await getTagArchives()).filter((archive) => archive.posts.length >= MIN_INDEXED_TAG_POSTS);
+---
+
+<BaseLayout title="分類與標籤 | 淺草先生" description="依分類與標籤瀏覽淺草先生的文章。">
+  <section class="page-intro">
+    <h1>分類與標籤</h1>
+    <p>分類的篇數包含子分類；標籤只列出兩篇以上的。</p>
+  </section>
+  <div class="page-body">
+    <section class="year-group" aria-labelledby="categories-title">
+      <h2 class="year-title" id="categories-title">分類</h2>
+      <ul class="term-tree">
+        {categories.map((category) => (
+          <li>
+            <a class="term-tree-root" href={category.path}>{category.name}<span class="term-count">{category.posts.length}</span></a>
+            {category.children.length > 0 && (
+              <ul class="term-list term-list-inline">
+                {category.children.map((child) => (
+                  <li><a href={child.path}>{child.name}<span class="term-count">{child.posts.length}</span></a></li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+    <section class="year-group" aria-labelledby="tags-title">
+      <h2 class="year-title" id="tags-title">標籤</h2>
+      <ul class="term-list term-list-inline">
+        {tags.map((tag) => (
+          <li><a href={tag.path}>#{tag.name}<span class="term-count">{tag.posts.length}</span></a></li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

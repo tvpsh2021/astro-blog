@@ -56,6 +56,7 @@ main { flex: 1; }
 
 .site-header { height: 5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .brand { display: inline-flex; align-items: center; gap: .625rem; font-size: 1.125rem; font-weight: 700; }
+.brand-tagline { padding-left: .625rem; border-left: 1px solid var(--line); color: var(--ink-muted); font-size: .875rem; font-weight: 400; }
 .brand-mark { width: 2rem; height: 2rem; display: grid; place-items: center; color: var(--paper); background: var(--grass); border-radius: 4px; font-size: 1.125rem; font-weight: 500; }
 .site-header nav { display: flex; align-items: center; gap: 1.75rem; font-size: .9375rem; font-weight: 500; }
 .site-header nav a:hover { color: var(--grass); }
@@ -127,11 +128,13 @@ a.activity-year:hover { outline: 1px solid var(--ink-muted); outline-offset: 2px
 .entries { margin: 0; padding: 0; list-style: none; }
 .entry { display: grid; grid-template-columns: 6.5rem minmax(0, 40rem); gap: 1.5rem; }
 .entry + .entry { margin-top: 2.25rem; }
+.entry-meta { display: flex; flex-direction: column; align-items: start; gap: .25rem; }
 .entry-date { color: var(--ink-muted); font-size: .9375rem; line-height: 1.875rem; font-variant-numeric: tabular-nums; }
+.entry-category { color: var(--grass); font-size: .875rem; font-weight: 500; line-height: 1.5; }
+.entry-category:hover { text-decoration: underline; text-underline-offset: 3px; }
 .entry-title { margin: 0; font-size: 1.25rem; font-weight: 700; line-height: 1.5; text-wrap: pretty; }
 .entry-title a:hover { color: var(--grass); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 .entry-excerpt { margin: .5rem 0 0; color: var(--ink-muted); font-size: .9375rem; line-height: 1.8; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.entry-category { margin: .5rem 0 0; color: var(--ink-muted); font-size: .8125rem; }
 
 .timeline-compact .entry + .entry { margin-top: 0; border-top: 1px solid var(--line-soft); }
 .timeline-compact .entry { padding-block: .75rem; }
@@ -150,11 +153,28 @@ a.activity-year:hover { outline: 1px solid var(--ink-muted); outline-offset: 2px
 .all-posts-link { display: block; width: fit-content; margin: 2.5rem auto 0; padding: .75rem 1.5rem; border: 1px solid var(--line); border-radius: 4px; color: var(--grass); font-size: .9375rem; font-weight: 500; }
 .all-posts-link:hover { border-color: var(--grass); }
 
+/* Category and tag pages */
+.term-kicker { margin: 0 0 .5rem; color: var(--ink-muted); font-size: .9375rem; }
+.page-intro > .term-kicker a { color: inherit; text-decoration: none; }
+.page-intro > .term-kicker a:hover { color: var(--grass); }
+.term-list { margin: 0; padding: 0; list-style: none; }
+.term-list-inline { display: flex; flex-wrap: wrap; gap: .5rem; }
+.page-intro > .term-list { margin-top: 1.25rem; }
+.term-list a { display: inline-flex; align-items: baseline; gap: .375rem; padding: .375rem .625rem; background: var(--surface); border-radius: 3px; color: var(--grass); font-size: .875rem; }
+.term-list a:hover { background: var(--selection); }
+.term-count { color: var(--ink-muted); font-size: .75rem; font-variant-numeric: tabular-nums; }
+.term-tree { margin: 0; padding: 0; list-style: none; }
+.term-tree > li + li { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--line-soft); }
+.term-tree-root { display: inline-flex; align-items: baseline; gap: .5rem; font-size: 1.125rem; font-weight: 700; }
+.term-tree-root:hover { color: var(--grass); }
+.term-tree .term-list { margin-top: .75rem; }
+
 /* Article */
 .article-page { padding-inline: var(--gutter); }
 .article-header { max-width: var(--measure); margin: 0 auto; padding: 4rem 0 2.5rem; border-bottom: 1px solid var(--line); }
 .article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .875rem; color: var(--ink-muted); font-size: .9375rem; }
-.article-meta span { padding-left: .875rem; border-left: 1px solid var(--line); }
+.article-meta a { padding-left: .875rem; border-left: 1px solid var(--line); }
+.article-meta a:hover { color: var(--grass); }
 .article-header h1 { margin: .875rem 0 0; font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; line-height: 1.4; text-wrap: pretty; overflow-wrap: break-word; }
 
 .article-content {
@@ -242,7 +262,8 @@ a.activity-year:hover { outline: 1px solid var(--ink-muted); outline-offset: 2px
 .article-content iframe { display: block; max-width: 100%; }
 .article-content hr { border: 0; border-top: 1px solid var(--line); margin: 2.5em 0; }
 .article-tags { max-width: var(--measure); display: flex; flex-wrap: wrap; gap: .5rem; margin: 4rem auto 0; }
-.article-tags span { padding: .375rem .625rem; background: var(--surface); border-radius: 3px; color: var(--grass); font-size: .875rem; }
+.article-tags a { padding: .375rem .625rem; background: var(--surface); border-radius: 3px; color: var(--grass); font-size: .875rem; }
+.article-tags a:hover { background: var(--selection); }
 .article-footer { max-width: var(--measure); margin: 2.25rem auto 0; padding-top: 1.75rem; border-top: 1px solid var(--line); font-size: .9375rem; }
 .article-footer a { color: var(--grass); font-weight: 500; }
 .article-footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -251,6 +272,7 @@ a.activity-year:hover { outline: 1px solid var(--ink-muted); outline-offset: 2px
   :root { --gutter: 1.25rem; }
   .site-header { height: 4rem; }
   .brand { font-size: 1rem; }
+  .brand-tagline { display: none; }
   .brand-mark { width: 1.75rem; height: 1.75rem; font-size: 1rem; }
   .site-header nav { gap: 1rem; font-size: .875rem; }
   .theme-prefix { display: none; }
@@ -262,6 +284,8 @@ a.activity-year:hover { outline: 1px solid var(--ink-muted); outline-offset: 2px
   .year-group { display: block; padding: 1.75rem 0; }
   .year-title { position: static; margin-bottom: 1.25rem; }
   .entry { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+  .entry-meta { flex-direction: row; align-items: baseline; gap: .5rem; }
+  .entry-category::before { content: "·"; display: inline-block; margin-right: .5rem; color: var(--ink-muted); }
   .entry-date { line-height: 1.5; }
   .timeline-compact .entry-date { line-height: 1.5; }
   .pagination { grid-template-columns: 1fr 1fr; row-gap: 1.375rem; }
