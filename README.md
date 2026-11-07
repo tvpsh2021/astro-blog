@@ -34,10 +34,21 @@ Besides the post pages, the build creates category and tag pages at their WordPr
 The site is deployed on Cloudflare Pages. A deployment runs when:
 
 - a commit is pushed to this repository, or
-- a post is created, updated, or deleted in WordPress, which calls a Cloudflare Pages deploy hook.
+- a post is created, updated, or deleted in WordPress, which calls a Cloudflare Pages deploy hook through the plugin in [`wordpress-plugin/cloudflare-pages-deploy-hook`](wordpress-plugin/cloudflare-pages-deploy-hook/README.md).
 
 Changes that do not touch a post, such as renaming a category or tag, do not trigger the hook. Redeploy manually from the Pages dashboard to publish them.
 
 Set `WP_API_BASE_URL` in the Pages build environment. Pages uses the Node.js version in `.node-version`; a `NODE_VERSION` variable in the Pages settings would override it.
 
 Cloudflare Pages reads `public/_headers` to set `X-Robots-Tag: noindex` on `pages.dev` hosts only, so preview and staging URLs stay out of search results.
+
+## WordPress plugin
+
+The deploy hook plugin lives in `wordpress-plugin/` and is not part of the Astro build. See its [README](wordpress-plugin/cloudflare-pages-deploy-hook/README.md) for installation and operations. To package it for upload:
+
+```sh
+cd wordpress-plugin
+zip -r cloudflare-pages-deploy-hook.zip cloudflare-pages-deploy-hook -x '*.DS_Store'
+```
+
+The zip must keep the top-level `cloudflare-pages-deploy-hook/` folder so WordPress treats it as the same plugin on upgrade. Zip files are ignored by Git.
